@@ -1,0 +1,5 @@
+Download creditcard.csv from:
+https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud
+
+Place the file here:
+dataset/creditcard.csv

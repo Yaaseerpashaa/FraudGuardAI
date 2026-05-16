@@ -1,0 +1,35 @@
+# =============================================
+# .gitignore — files NOT uploaded to GitHub
+# =============================================
+
+# Python bytecode files
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environment folder
+venv/
+env/
+.env/
+
+# Dataset (too large for GitHub — 144MB)
+dataset/
+*.csv
+
+# Trained model files (regenerate by running train_model.py)
+models/*.pkl
+
+# Generated images (regenerated during training)
+models/*.png
+
+# VS Code settings
+.vscode/
+
+# macOS junk
+.DS_Store
+
+# Jupyter notebooks checkpoints
+.ipynb_checkpoints/
+
+# Environment variables file
+.env

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Credit Card Fraud Detector</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+  <!-- Google Fonts: Syne for headings, DM Mono for data -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+  <!-- ===================== HEADER ===================== -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">🛡️</span>
+        <span class="logo-text">FraudGuard<span class="logo-accent">AI</span></span>
+      </div>
+      <p class="tagline">Credit Card Transaction Fraud Detector — Powered by Machine Learning</p>
+    </div>
+  </header>
+
+  <!-- ===================== MAIN CONTENT ===================== -->
+  <main class="main-container">
+
+    <!-- ---- RESULT BANNER (shown only after form submission) ---- -->
+    {% if prediction %}
+    <div class="result-banner {{ result_class }}">
+      <div class="result-icon">{{ icon }}</div>
+      <div class="result-text">
+        <h2 class="result-title">
+          Transaction is <span class="highlight">{{ prediction }}</span>
+        </h2>
+        <p class="result-msg">{{ message }}</p>
+        <div class="result-meta">
+          <span class="meta-chip">Confidence: <strong>{{ confidence }}%</strong></span>
+          <span class="meta-chip">Amount: <strong>${{ amount }}</strong></span>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- ---- INFO CARDS ---- -->
+    <div class="info-cards">
+      <div class="info-card">
+        <div class="card-icon">🔍</div>
+        <h3>ML Powered</h3>
+        <p>Uses Random Forest & other algorithms trained on 284K+ real transactions</p>
+      </div>
+      <div class="info-card">
+        <div class="card-icon">⚡</div>
+        <h3>Instant Detection</h3>
+        <p>Get fraud prediction in milliseconds with confidence score</p>
+      </div>
+      <div class="info-card">
+        <div class="card-icon">📊</div>
+        <h3>High Accuracy</h3>
+        <p>Trained with SMOTE balancing for reliable fraud detection</p>
+      </div>
+    </div>
+
+    <!-- ===================== FORM ===================== -->
+    <section class="form-section">
+      <div class="form-header">
+        <h2>Enter Transaction Details</h2>
+        <p>Fill in the fields below. V1–V28 are anonymized PCA features from the dataset.</p>
+        <p class="tip">💡 <strong>Tip for testing:</strong> Leave V1–V28 as <code>0</code> and change only Amount and Time.</p>
+      </div>
+
+      <!-- Form submits to /predict route in Flask -->
+      <form action="/predict" method="POST" class="transaction-form">
+
+        <!-- ---- Row 1: Time and Amount ---- -->
+        <div class="form-group-main">
+          <div class="field-box highlight-field">
+            <label for="Time">⏱ Time (seconds)</label>
+            <input type="number" id="Time" name="Time"
+                   placeholder="e.g. 3600"
+                   step="any" required/>
+            <small>Seconds elapsed since the first transaction</small>
+          </div>
+
+          <div class="field-box highlight-field">
+            <label for="Amount">💵 Amount ($)</label>
+            <input type="number" id="Amount" name="Amount"
+                   placeholder="e.g. 149.62"
+                   step="any" min="0" required/>
+            <small>Transaction amount in USD</small>
+          </div>
+        </div>
+
+        <!-- ---- V1 to V28 PCA Features ---- -->
+        <div class="pca-header">
+          <h3>PCA Feature Values (V1 – V28)</h3>
+          <p>These are anonymized features from the Kaggle dataset. Use 0 for testing.</p>
+        </div>
+
+        <div class="pca-grid">
+          {% for i in range(1, 29) %}
+          <div class="field-box pca-field">
+            <label for="V{{ i }}">V{{ i }}</label>
+            <input type="number" id="V{{ i }}" name="V{{ i }}"
+                   placeholder="0.0"
+                   value="0"
+                   step="any"/>
+          </div>
+          {% endfor %}
+        </div>
+
+        <!-- ---- Submit Button ---- -->
+        <div class="submit-row">
+          <button type="submit" class="predict-btn">
+            <span class="btn-icon">🔎</span>
+            <span class="btn-text">Analyze Transaction</span>
+          </button>
+          <button type="reset" class="reset-btn">Reset</button>
+        </div>
+
+      </form>
+    </section>
+
+    <!-- ===================== HOW IT WORKS ===================== -->
+    <section class="how-it-works">
+      <h2>How It Works</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <p>Enter transaction details (Time, Amount, V1–V28)</p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <p>ML model analyzes the pattern of the transaction</p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <p>Outputs: <strong>Fraudulent ⚠️</strong> or <strong>Genuine ✅</strong></p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="site-footer">
+    <p>Built with 🐍 Python + Flask + Scikit-learn &nbsp;|&nbsp; Internship Project &nbsp;|&nbsp; Dataset: <a href="https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud" target="_blank">Kaggle Credit Card Fraud</a></p>
+  </footer>
+
+</body>
+</html>
